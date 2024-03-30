@@ -399,10 +399,15 @@ void MainWindow::changeStyle()
         m_pActionDarkMode->setChecked(false);
     }
 
+// ------------ This line has been changed --------------
     if(QApplication *pApp = qobject_cast<QApplication *>(QApplication::instance())) {
         if(m_sCurrentStyle == "default") {
-            pApp->setStyleSheet("");
+            QFile file(":/tecniq.qss");
+            file.open(QFile::ReadOnly);
+            QTextStream stream(&file);
+            pApp->setStyleSheet(stream.readAll());
             emit guiStyleChanged(DISPLIB::AbstractView::StyleMode::Default);
+// ----------------- From here to here ------------------ 
         } else if (m_sCurrentStyle == "dark") {
             QFile file(":/dark.qss");
             file.open(QFile::ReadOnly);
@@ -410,6 +415,14 @@ void MainWindow::changeStyle()
             pApp->setStyleSheet(stream.readAll());
             emit guiStyleChanged(DISPLIB::AbstractView::StyleMode::Dark);
         }
+
+
+    /*        if(m_sCurrentStyle == "default") {
+            QFile file(":/tecniq.qss");
+            file.open(QFile::ReadOnly);
+            QTextStream stream(&file);
+            pApp->setStyleSheet(stream.readAll());
+            emit guiStyleChanged(DISPLIB::AbstractView::StyleMode::Default);*/
 
         // Set default font
         int id = QFontDatabase::addApplicationFont(":/fonts/Roboto-Light.ttf");
@@ -540,7 +553,7 @@ void MainWindow::initPluginViews()
 }
 
 //=============================================================================================================
-
+// This is how you customize the plugin?
 void MainWindow::createPluginViews()
 {
     //Add Plugin views to the MultiView, which is the central widget
